@@ -15,7 +15,10 @@ limit 2;
 -- Then modify your query to drive the year of the sale from the date column.
 
 select 
-    * 
+    src:dealership as dealership,
+    src:date::date as sale_date,
+    src:salesperson.name as salesperson_name,
+    year(sale_date) as sale_year
 from car_sales 
 limit 2;
 
@@ -47,9 +50,10 @@ limit 2;
 -- promotion was applied.
 
 select 
-    * 
-from car_sales 
-limit 2;
+    src:dealership as dealership,
+    pr.VALUE as promotion
+from car_sales,
+lateral flatten(input => SRC:promotions) pr;
 
 
 -- Write a query to flatten the VEHICLE_INFO array and extract the make, 
